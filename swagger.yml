@@ -1,0 +1,691 @@
+swagger: "2.0"
+info:
+  description: API documentation administrasi-hotel
+  version: 1.0.0
+  title: Adminstrasi Hotel
+  # put the contact info for your development or API team
+  contact:
+    email: darmawandoni6@gmail.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+  - name: Auth
+    description: Authentication Api
+  - name: Users
+    description: CRUD user
+  - name: Type room
+    description: CRUD Type room
+  - name: Facility
+    description: CRUD Facility
+
+paths:
+  /login:
+    post:
+      tags:
+        - Auth
+      summary: login users
+      description: |
+        Passing Username And Password to get Token JWT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Login User
+          description: Login User
+          schema:
+            $ref: "#/definitions/Login"
+      responses:
+        200:
+          description: Response Auth Login
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                $ref: "#/definitions/JWT"
+        400:
+          description: invalid input, object invalid
+# crud user
+  /users:
+    post:
+      tags:
+        - Users
+      summary: create users
+      description: create access login
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Users
+          description: body
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: Response create user
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                type: string
+                example: ""
+              meta:
+                example: null
+        400:
+          description: invalid input, object invalid
+    get:
+      tags:
+        - Users
+      summary: browse data
+      description: get all data
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Response create user
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data: 
+                type: array
+                items:
+                   $ref: '#/definitions/User'
+              meta:
+                  $ref: '#/definitions/pagination'
+        400:
+          description: invalid input, object invalid
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: find by id
+      description: get user by id
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Response create user
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                $ref: '#/definitions/User'
+              meta:
+                example: null
+        400:
+          description: invalid input, object invalid
+    put:
+      tags:
+      - Users
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID.
+        - in: body
+          name: body
+          description: Updated user object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: Response create user
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                example: null
+              meta:
+                example: null
+        400:
+          description: invalid input, object invalid
+    delete:
+      tags:
+      - Users
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: The name that needs to be deleted
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Response create user
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                example: null
+              meta:
+                example: null
+        400:
+          description: invalid input, object invalid
+ #------
+# crud Type room
+  /type-room:
+    post:
+      tags:
+        - Type room
+      summary: create type room
+      description: |
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: type room
+          description: body dacility
+          schema:
+            $ref: '#/definitions/type_room'
+      responses:
+        200:
+          description: Response create room
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                example: null
+              meta:
+                example: null
+        400:
+          description: invalid input, object invalid
+    get:
+      tags:
+        - Type room
+      summary: browse data
+      description: get all data
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Response create type room
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data: 
+                type: array
+                items:
+                   $ref: '#/definitions/type_room'
+              meta:
+                  $ref: '#/definitions/pagination'
+        400:
+          description: invalid input, object invalid
+  /type-room/{id}:
+    get:
+      tags:
+        - Type room
+      summary: find by id
+      description: get type room by id
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Response create user
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                $ref: '#/definitions/type_room'
+              meta:
+                example: null
+        400:
+          description: invalid input, object invalid
+    put:
+      tags:
+      - Type room
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: idTyperoom
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID.
+        - in: body
+          name: body
+          description: Updated user object
+          required: true
+          schema:
+            $ref: '#/definitions/type_room'
+      responses:
+        200:
+          description: Response create user
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                example: null
+              meta:
+                example: null
+        400:
+          description: invalid input, object invalid
+    delete:
+      tags:
+      - Type room
+      summary: Delete Type room
+      description: This can only be done by the logged in type room.
+      operationId: deleteTypeRoom
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: The name that needs to be deleted
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Response create user
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                example: null
+              meta:
+                example: null
+        400:
+          description: invalid input, object invalid
+ #------
+# crud facility
+  /facility:
+    post:
+      tags:
+        - Facility
+      summary: create facility
+      description: |
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: facility
+          description: body facility
+          schema:
+            $ref: '#/definitions/facility'
+      responses:
+        200:
+          description: Response create facility
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                example: null
+              meta:
+                example: null
+        400:
+          description: invalid input, object invalid
+    get:
+      tags:
+        - Facility
+      summary: browse data
+      description: get all data
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Response get facility
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data: 
+                type: array
+                items:
+                   $ref: '#/definitions/facility'
+              meta:
+                  $ref: '#/definitions/pagination'
+        400:
+          description: invalid input, object invalid
+  /facility/{id}:
+    get:
+      tags:
+        - Facility
+      summary: find by id
+      description: get type room by id
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Response get facility
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                $ref: '#/definitions/facility'
+              meta:
+                example: null
+        400:
+          description: invalid input, object invalid
+    put:
+      tags:
+      - Facility
+      summary: Update facility
+      description: This can only be done by the logged in user.
+      operationId: idFacility
+      produces:
+      - application/json
+      parameters:
+        - in: path
+          name: id   # Note the name is the same as in the path
+          required: true
+          type: integer
+          minimum: 1
+          description: The user ID.
+        - in: body
+          name: body
+          description: Updated facility object
+          required: true
+          schema:
+            $ref: '#/definitions/facility'
+      responses:
+        200:
+          description: Response update facility
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                example: null
+              meta:
+                example: null
+        400:
+          description: invalid input, object invalid
+    delete:
+      tags:
+      - Facility
+      summary: Delete Type room
+      description: This can only be done by the logged in facility.
+      operationId: deleteFacility
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: The name that needs to be deleted
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Response delete facility
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: "OK"
+              data:
+                example: null
+              meta:
+                example: null
+        400:
+          description: invalid input, object invalid
+ #------
+
+definitions:
+  Login:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        example: jhon@doe@gmail.com
+      password:
+        type: string
+        example: QwanjjaseuQeq
+        description: encrypted password AES
+  JWT:
+    type: object
+    required:
+      - token
+      - expire_token
+      - refresh_token
+      - expire_refresh_token
+    properties:
+      email:
+        type: string
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.|eyJleHAiOjE2Mjg1MTA1NzcsImp0aSI6ImV5SmhiR2NpT2l a7C6ZcazsgjdKXR2eXOPRzBhRv99NOaDMNN2gyYDE2Y
+      expire_token:
+        type: string
+        example: 2021-08-09T12:02:57Z
+        format: date-time
+      refresh_token:
+        type: string
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.|eyJleHAiOjE2Mjg1MTA1NzcsImp0aSI6ImV5SmhiR2NpT2l a7C6ZcazsgjdKXR2eXOPRzBhRv99NOaDMNN2gyYDE2Y
+      expire_refresh_token:
+        type: string
+        example: 2021-08-09T12:02:57Z
+        format: date-time
+# Added by API Auto Mocking Plugin
+# crud user
+  User:
+    type: object
+    required:
+      - name
+      - email
+      - password
+    properties:
+      id:
+        type: integer
+        example: 1
+      name:
+        type: string
+        example: doni darmawan
+      email:
+        type: string
+        example: jhon@doe@gmail.com
+      password:
+        type: string
+        example: QwanjjaseuQeq
+        description: encrypted password AES
+#----------
+# crud type_room
+  type_room:
+    type: object
+    required:
+      - name
+      - status
+    properties:
+      id:
+        type: integer
+        example: 1
+      name:
+        type: string
+        example: single room
+      status:
+        type: boolean
+        example: true
+#----------
+# crud facility
+  facility:
+    type: object
+    required:
+      - name
+      - status
+      - price
+    properties:
+      id:
+        type: integer
+        example: 1
+      name:
+        type: string
+        example: film
+      status:
+        type: boolean
+        example: true
+      price:
+        type: integer
+        example: 100000
+#----------
+# meta pagination
+  pagination:
+    type: object
+    properties:
+      current_page:
+        type: integer
+        example: 1
+      last_page:
+        type: integer
+        example: 1
+      total:
+        type: integer
+        example: 1
+      per_page:
+        type: integer
+        example: 10
+#----------------
+host: virtserver.swaggerhub.com
+basePath: /darmawandoni6/swap-online
+schemes:
+  - https
