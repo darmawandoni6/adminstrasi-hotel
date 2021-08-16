@@ -1,0 +1,20 @@
+{
+  "debug": true,
+  "server": {
+    "address": "127.0.0.1:9090"
+  },
+  "context": {
+    "timeout": 2
+  },
+  "database": {
+    "host": "localhost",
+    "port": "3306",
+    "user": "root",
+    "pass": "",
+    "name": "administrasi-hotel"
+  },
+  "jwt": {
+    "secret": "supersecret12345!@#$%",
+    "expired": 30
+  }
+}
