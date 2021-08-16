@@ -25,7 +25,7 @@ func (jwtConf *ConfigJWT) Init() middleware.JWTConfig {
 		Claims:     &JwtCustomClaims{},
 		SigningKey: []byte(jwtConf.Secret),
 		ErrorHandlerWithContext: middleware.JWTErrorHandlerWithContext(func(e error, c echo.Context) error {
-			return baseResponse.NewErrorResponse(c, http.StatusForbidden, e)
+			return baseResponse.ErrorResponse(c, http.StatusForbidden, e)
 		}),
 	}
 }

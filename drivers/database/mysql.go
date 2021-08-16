@@ -1,6 +1,7 @@
 package database
 
 import (
+	"administrasi-hotel/drivers/tables/users"
 	"fmt"
 	"log"
 
@@ -28,6 +29,10 @@ func (config *ConfigDB) InitialDB() *gorm.DB {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	db.AutoMigrate(
+		&users.Users{},
+	)
 
 	return db
 }

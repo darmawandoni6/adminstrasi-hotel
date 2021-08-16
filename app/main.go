@@ -1,12 +1,16 @@
 package main
 
 import (
+	_userUsecase "administrasi-hotel/busieness/users"
+	_userController "administrasi-hotel/controlers/users"
+	_userRepo "administrasi-hotel/drivers/tables/users"
+	"time"
+
 	"administrasi-hotel/drivers/database"
 	"log"
 
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
-	"gorm.io/gorm"
 
 	_middleware "administrasi-hotel/app/middlewares"
 	_routes "administrasi-hotel/app/routes"
@@ -24,10 +28,6 @@ func init() {
 	}
 }
 
-func dbMigrate(db *gorm.DB) {
-	db.AutoMigrate()
-}
-
 func main() {
 	configDB := database.ConfigDB{
 		DB_Username: viper.GetString(`database.user`),
@@ -37,19 +37,23 @@ func main() {
 		DB_Database: viper.GetString(`database.name`),
 	}
 	db := configDB.InitialDB()
-	dbMigrate(db)
 
 	configJWT := _middleware.ConfigJWT{
 		Secret:    viper.GetString(`jwt.secret`),
 		ExpSecret: viper.GetInt(`jwt.expired`),
 	}
 
-	// timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
+	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
 	e := echo.New()
 
+	userRepo := _userRepo.UsersRepository(db)
+	userUsecase := _userUsecase.UsersUsecase(timeoutContext, userRepo)
+	userControler := _userController.NewUserController(userUsecase)
+
 	routesInit := _routes.ControllerList{
-		JWTMiddleware: configJWT.Init(),
+		JWTMiddleware:  configJWT.Init(),
+		UserController: *userControler,
 	}
 	routesInit.RouteRegister(e)
 

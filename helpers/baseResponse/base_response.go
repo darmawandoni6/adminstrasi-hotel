@@ -24,7 +24,7 @@ type BaseResponseAuth struct {
 	Data interface{} `json:"data"`
 }
 
-func NewSuccessResponseAuth(c echo.Context, data interface{}) error {
+func SuccessResponseAuth(c echo.Context, data interface{}) error {
 	response := BaseResponseAuth{}
 	response.Meta.Status = http.StatusOK
 	response.Meta.Message = "Success"
@@ -33,7 +33,7 @@ func NewSuccessResponseAuth(c echo.Context, data interface{}) error {
 	return c.JSON(http.StatusOK, response)
 }
 
-func NewSuccessResponse(c echo.Context, data interface{}, pagination interface{}) error {
+func SuccessResponse(c echo.Context, data interface{}, pagination interface{}) error {
 	response := BaseResponse{}
 	response.Meta.Status = http.StatusOK
 	response.Meta.Message = "Success"
@@ -43,7 +43,7 @@ func NewSuccessResponse(c echo.Context, data interface{}, pagination interface{}
 	return c.JSON(http.StatusOK, response)
 }
 
-func NewErrorResponse(c echo.Context, status int, err error) error {
+func ErrorResponse(c echo.Context, status int, err error) error {
 	response := BaseResponse{}
 	response.Meta.Status = status
 	response.Meta.Message = "Something not right"
