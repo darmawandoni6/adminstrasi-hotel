@@ -1,13 +1,17 @@
 package users
 
 import (
+	"administrasi-hotel/app/middlewares"
 	"administrasi-hotel/busieness/users"
 	"administrasi-hotel/helpers/alert"
 	"administrasi-hotel/helpers/baseResponse"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
+
+	"github.com/golang-jwt/jwt"
 )
 
 type UserController struct {
@@ -98,6 +102,25 @@ func (ctrl *UserController) Find(c echo.Context) error {
 	return baseResponse.SuccessResponse(c, resArr, paginition)
 }
 
+func (ctrl *UserController) Profile(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*middlewares.JwtCustomClaims)
+
+	id := claims.ID
+
+	res, err := ctrl.userUseCase.FindById(ctx, id)
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+
+	}
+
+	return baseResponse.SuccessResponse(c, FromDomain(res), nil)
+
+}
+
 func (ctrl *UserController) FindById(c echo.Context) error {
 
 	ctx := c.Request().Context()
@@ -160,5 +183,21 @@ func (ctrl *UserController) Delete(c echo.Context) error {
 	}
 
 	return baseResponse.SuccessResponse(c, alert.SuccessDelete, nil)
+
+}
+
+func (ctrl *UserController) Dummy(c echo.Context) error {
+
+	location, _ := time.LoadLocation("Asia/Jakarta")
+
+	format := "2006-01-02 15:04:05"
+
+	date1, _ := time.ParseInLocation(format, "2020-12-17 15:00:00", location)
+	date2, _ := time.ParseInLocation(format, "2020-08-27 15:00:00", location)
+
+	day := date1.Sub(date2).Hours() / 24
+	// year, month, day, _, _, _ := function.DiffCustom(date1, date2)
+
+	return baseResponse.SuccessResponse(c, day, nil)
 
 }
