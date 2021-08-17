@@ -130,11 +130,17 @@ func (uc *usecase) Update(ctx context.Context, id int, data *Domain) error {
 	return nil
 }
 
-func (uc *usecase) Delete(ctx context.Context, id int, data *Domain) error {
+func (uc *usecase) Delete(ctx context.Context, id int) error {
 	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
-	err := uc.respository.Delete(ctx, id, data)
+	res, err := uc.respository.FindById(ctx, id)
+
+	if err != nil {
+		return err
+	}
+
+	err = uc.respository.Delete(ctx, id, &res)
 
 	if err != nil {
 		return err

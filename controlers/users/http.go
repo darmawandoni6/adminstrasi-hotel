@@ -168,7 +168,6 @@ func (ctrl *UserController) Update(c echo.Context) error {
 
 func (ctrl *UserController) Delete(c echo.Context) error {
 	ctx := c.Request().Context()
-	req := ReqUsers{}
 	paramId := c.Param("id")
 
 	id, err := strconv.Atoi(paramId)
@@ -176,7 +175,7 @@ func (ctrl *UserController) Delete(c echo.Context) error {
 		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	err = ctrl.userUseCase.Delete(ctx, id, req.ToDomain())
+	err = ctrl.userUseCase.Delete(ctx, id)
 
 	if err != nil {
 		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)

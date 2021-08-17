@@ -99,5 +99,4 @@ func (ur *repository) Delete(ctx context.Context, id int, domain *users.Domain) 
 	}
 
 	return nil
-
 }
