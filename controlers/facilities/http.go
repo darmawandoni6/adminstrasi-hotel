@@ -90,7 +90,27 @@ func (ctrl *FacilitiesController) FindById(c echo.Context) error {
 }
 
 func (ctrl *FacilitiesController) Update(c echo.Context) error {
-	return baseResponse.SuccessResponse(c, alert.SuccessInsert, nil)
+	ctx := c.Request().Context()
+	req := ReqFacilities{}
+	paramId := c.Param("id")
+	err := c.Bind(&req)
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	id, err := strconv.Atoi(paramId)
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	err = ctrl.facilitiesUsecase.Update(ctx, id, req.ToDomain())
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	return baseResponse.SuccessResponse(c, alert.SuccessUpdate, nil)
 }
 
 func (ctrl *FacilitiesController) Delete(c echo.Context) error {

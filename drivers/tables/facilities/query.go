@@ -56,3 +56,14 @@ func (ur *repository) FindById(ctx context.Context, id int) (facilities.Domain, 
 
 	return res, nil
 }
+
+func (ur *repository) Update(ctx context.Context, id int, domain *facilities.Domain) error {
+	rec := fromDomain(domain)
+	rec.Id = id
+	err := ur.db.Save(&rec).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

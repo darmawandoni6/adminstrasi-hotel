@@ -69,3 +69,16 @@ func (uc *usecase) FindById(ctx context.Context, id int) (Domain, error) {
 	}
 	return res, err
 }
+
+func (uc *usecase) Update(ctx context.Context, id int, data *Domain) error {
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	err := uc.respository.Update(ctx, id, data)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
