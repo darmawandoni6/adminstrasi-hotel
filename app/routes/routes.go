@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"administrasi-hotel/controlers/facilities"
 	"administrasi-hotel/controlers/users"
 
 	"github.com/labstack/echo/v4"
@@ -8,8 +9,9 @@ import (
 )
 
 type ControllerList struct {
-	JWTMiddleware  middleware.JWTConfig
-	UserController users.UserController
+	JWTMiddleware        middleware.JWTConfig
+	UserController       users.UserController
+	FacilitiesController facilities.FacilitiesController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
@@ -31,5 +33,9 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	user.DELETE("/id/:id", cl.UserController.Delete)
 
 	user.POST("/dumy", cl.UserController.Dummy)
+
+	facilities := e.Group(v1 + "/facilities")
+	facilities.Use(jwt)
+	facilities.POST("", cl.FacilitiesController.Create)
 
 }

@@ -4,6 +4,11 @@ import (
 	_userUsecase "administrasi-hotel/busieness/users"
 	_userController "administrasi-hotel/controlers/users"
 	_userRepo "administrasi-hotel/drivers/tables/users"
+
+	_facilitiesUsecase "administrasi-hotel/busieness/facilities"
+	_facilitiesController "administrasi-hotel/controlers/facilities"
+	_facilitiesRepo "administrasi-hotel/drivers/tables/facilities"
+
 	"time"
 
 	"administrasi-hotel/drivers/database"
@@ -51,9 +56,14 @@ func main() {
 	userUsecase := _userUsecase.UsersUsecase(timeoutContext, userRepo, &configJWT)
 	userControler := _userController.NewUserController(userUsecase)
 
+	facilitiesRepo := _facilitiesRepo.UsersRepository(db)
+	facilitiesUsecase := _facilitiesUsecase.FacilitiesUsecase(timeoutContext, facilitiesRepo, &configJWT)
+	facilitiesControler := _facilitiesController.NewFacilitiesController(facilitiesUsecase)
+
 	routesInit := _routes.ControllerList{
-		JWTMiddleware:  configJWT.Init(),
-		UserController: *userControler,
+		JWTMiddleware:        configJWT.Init(),
+		UserController:       *userControler,
+		FacilitiesController: *facilitiesControler,
 	}
 	routesInit.RouteRegister(e)
 

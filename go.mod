@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo/v4 v4.5.0
 	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
