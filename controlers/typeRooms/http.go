@@ -1,7 +1,7 @@
-package facilities
+package typeRooms
 
 import (
-	"administrasi-hotel/busieness/facilities"
+	"administrasi-hotel/busieness/typeRooms"
 	"administrasi-hotel/helpers/alert"
 	"administrasi-hotel/helpers/baseResponse"
 	"net/http"
@@ -10,26 +10,26 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type FacilitiesController struct {
-	facilitiesUsecase facilities.Usecase
+type TypeRoomsController struct {
+	typeRoomsUsecase typeRooms.Usecase
 }
 
-func NewFacilitiesController(uc facilities.Usecase) *FacilitiesController {
-	return &FacilitiesController{
-		facilitiesUsecase: uc,
+func NewTypeRoomsController(uc typeRooms.Usecase) *TypeRoomsController {
+	return &TypeRoomsController{
+		typeRoomsUsecase: uc,
 	}
 }
 
-func (ctrl *FacilitiesController) Create(c echo.Context) error {
+func (ctrl *TypeRoomsController) Create(c echo.Context) error {
 	ctx := c.Request().Context()
-	req := ReqFacilities{}
+	req := ReqTypeRooms{}
 	err := c.Bind(&req)
 
 	if err != nil {
 		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	err = ctrl.facilitiesUsecase.Create(ctx, req.ToDomain())
+	err = ctrl.typeRoomsUsecase.Create(ctx, req.ToDomain())
 
 	if err != nil {
 		return baseResponse.ErrorResponse(c, http.StatusInternalServerError, err)
@@ -37,7 +37,7 @@ func (ctrl *FacilitiesController) Create(c echo.Context) error {
 
 	return baseResponse.SuccessResponse(c, alert.SuccessInsert, nil)
 }
-func (ctrl *FacilitiesController) Find(c echo.Context) error {
+func (ctrl *TypeRoomsController) Find(c echo.Context) error {
 	ctx := c.Request().Context()
 	qureyPage := c.QueryParam("page")
 	qureyOffset := c.QueryParam("limit")
@@ -53,7 +53,7 @@ func (ctrl *FacilitiesController) Find(c echo.Context) error {
 		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	res, count, LastPage, err := ctrl.facilitiesUsecase.Find(ctx, page, offset)
+	res, count, LastPage, err := ctrl.typeRoomsUsecase.Find(ctx, page, offset)
 
 	if err != nil {
 		return baseResponse.ErrorResponse(c, http.StatusInternalServerError, err)
@@ -64,7 +64,7 @@ func (ctrl *FacilitiesController) Find(c echo.Context) error {
 	paginition.PerPage = offset
 	paginition.Total = count
 
-	resArr := []ResFacilities{}
+	resArr := []ResTypeRooms{}
 
 	for _, value := range res {
 		resArr = append(resArr, FromDomain(value))
@@ -72,7 +72,7 @@ func (ctrl *FacilitiesController) Find(c echo.Context) error {
 	return baseResponse.SuccessResponse(c, resArr, paginition)
 }
 
-func (ctrl *FacilitiesController) FindById(c echo.Context) error {
+func (ctrl *TypeRoomsController) FindById(c echo.Context) error {
 	ctx := c.Request().Context()
 	paramId := c.Param("id")
 
@@ -80,7 +80,7 @@ func (ctrl *FacilitiesController) FindById(c echo.Context) error {
 	if err != nil {
 		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
 	}
-	res, err := ctrl.facilitiesUsecase.FindById(ctx, id)
+	res, err := ctrl.typeRoomsUsecase.FindById(ctx, id)
 
 	if err != nil {
 		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
@@ -89,9 +89,9 @@ func (ctrl *FacilitiesController) FindById(c echo.Context) error {
 	return baseResponse.SuccessResponse(c, FromDomain(res), nil)
 }
 
-func (ctrl *FacilitiesController) Update(c echo.Context) error {
+func (ctrl *TypeRoomsController) Update(c echo.Context) error {
 	ctx := c.Request().Context()
-	req := ReqFacilities{}
+	req := ReqTypeRooms{}
 	paramId := c.Param("id")
 	err := c.Bind(&req)
 
@@ -104,7 +104,7 @@ func (ctrl *FacilitiesController) Update(c echo.Context) error {
 		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	err = ctrl.facilitiesUsecase.Update(ctx, id, req.ToDomain())
+	err = ctrl.typeRoomsUsecase.Update(ctx, id, req.ToDomain())
 
 	if err != nil {
 		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
@@ -113,7 +113,7 @@ func (ctrl *FacilitiesController) Update(c echo.Context) error {
 	return baseResponse.SuccessResponse(c, alert.SuccessUpdate, nil)
 }
 
-func (ctrl *FacilitiesController) Delete(c echo.Context) error {
+func (ctrl *TypeRoomsController) Delete(c echo.Context) error {
 	ctx := c.Request().Context()
 	paramId := c.Param("id")
 
@@ -122,7 +122,7 @@ func (ctrl *FacilitiesController) Delete(c echo.Context) error {
 		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	err = ctrl.facilitiesUsecase.Delete(ctx, id)
+	err = ctrl.typeRoomsUsecase.Delete(ctx, id)
 
 	if err != nil {
 		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)

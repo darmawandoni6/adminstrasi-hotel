@@ -1,4 +1,4 @@
-package facilities
+package typeRooms
 
 import (
 	"context"
@@ -8,7 +8,6 @@ import (
 type Domain struct {
 	Id        int
 	Name      string
-	Price     float64
 	IsActive  bool
 	IsDelete  bool
 	CreatedAt time.Time

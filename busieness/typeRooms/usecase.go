@@ -1,4 +1,4 @@
-package facilities
+package typeRooms
 
 import (
 	"administrasi-hotel/app/middlewares"
@@ -12,7 +12,7 @@ type usecase struct {
 	jwtAuth        *middlewares.ConfigJWT
 }
 
-func FacilitiesUsecase(timeout time.Duration, cr Repository, jwtauth *middlewares.ConfigJWT) Usecase {
+func TypeRoomsUsecase(timeout time.Duration, cr Repository, jwtauth *middlewares.ConfigJWT) Usecase {
 	return &usecase{
 		contextTimeout: timeout,
 		respository:    cr,

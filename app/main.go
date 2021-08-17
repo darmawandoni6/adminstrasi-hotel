@@ -9,6 +9,10 @@ import (
 	_facilitiesController "administrasi-hotel/controlers/facilities"
 	_facilitiesRepo "administrasi-hotel/drivers/tables/facilities"
 
+	_typeRoomsUsecase "administrasi-hotel/busieness/typeRooms"
+	_typeRoomsController "administrasi-hotel/controlers/typeRooms"
+	_typeRoomsRepo "administrasi-hotel/drivers/tables/typeRooms"
+
 	"time"
 
 	"administrasi-hotel/drivers/database"
@@ -60,10 +64,15 @@ func main() {
 	facilitiesUsecase := _facilitiesUsecase.FacilitiesUsecase(timeoutContext, facilitiesRepo, &configJWT)
 	facilitiesControler := _facilitiesController.NewFacilitiesController(facilitiesUsecase)
 
+	typeRoomsRepo := _typeRoomsRepo.UsersRepository(db)
+	typeRoomsUsecase := _typeRoomsUsecase.TypeRoomsUsecase(timeoutContext, typeRoomsRepo, &configJWT)
+	typeRoomsController := _typeRoomsController.NewTypeRoomsController(typeRoomsUsecase)
+
 	routesInit := _routes.ControllerList{
 		JWTMiddleware:        configJWT.Init(),
 		UserController:       *userControler,
 		FacilitiesController: *facilitiesControler,
+		TypeRoomsController:  *typeRoomsController,
 	}
 	routesInit.RouteRegister(e)
 
