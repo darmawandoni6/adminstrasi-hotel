@@ -58,3 +58,27 @@ func (uc *usecase) Login(ctx context.Context, email, password string) (string, s
 
 	return token, expired, nil
 }
+
+func (uc *usecase) Find(ctx context.Context, page, perPage int) ([]Domain, int, int, error) {
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+	if page <= 0 {
+		page = 1
+	}
+	if perPage <= 0 {
+		page = 10
+	}
+
+	res, count, err := uc.respository.Find(ctx, page, perPage)
+	if err != nil {
+		return []Domain{}, 0, 0, err
+	}
+
+	lastPage := count / perPage
+
+	if count%perPage > 0 {
+		lastPage += 1
+	}
+
+	return res, count, lastPage, err
+}

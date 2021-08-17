@@ -46,3 +46,20 @@ func (ur *repository) Login(ctx context.Context, email, password string) (users.
 
 	return res, nil
 }
+func (ur *repository) Find(ctx context.Context, page, perPage int) ([]users.Domain, int, error) {
+
+	res := []users.Domain{}
+	offset := (page - 1) * perPage
+
+	var count int64
+
+	err := ur.db.Model(&Users{}).Find(&res).Offset(offset).Limit(perPage).Error
+	ur.db.Model(&Users{}).Count(&count)
+
+	if err != nil {
+
+		return res, 0, err
+	}
+
+	return res, int(count), nil
+}
