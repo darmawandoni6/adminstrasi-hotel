@@ -27,3 +27,20 @@ func (ur *repository) Create(ctx context.Context, domain *facilities.Domain) err
 
 	return nil
 }
+
+func (ur *repository) Find(ctx context.Context, page, perPage int) ([]facilities.Domain, int, error) {
+
+	res := []facilities.Domain{}
+	offset := (page - 1) * perPage
+
+	var count int64
+
+	err := ur.db.Model(&Facilities{}).Find(&res).Offset(offset).Limit(perPage).Error
+	ur.db.Model(&Facilities{}).Count(&count)
+
+	if err != nil {
+		return res, 0, err
+	}
+
+	return res, int(count), nil
+}

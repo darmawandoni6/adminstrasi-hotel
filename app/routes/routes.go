@@ -36,6 +36,10 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 
 	facilities := e.Group(v1 + "/facilities")
 	facilities.Use(jwt)
+	facilities.GET("", cl.FacilitiesController.Find)
+	facilities.GET("/id/:id", cl.FacilitiesController.FindById)
 	facilities.POST("", cl.FacilitiesController.Create)
+	facilities.PUT("/id/:id", cl.FacilitiesController.Update)
+	facilities.DELETE("/id/:id", cl.FacilitiesController.Delete)
 
 }
