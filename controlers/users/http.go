@@ -19,12 +19,6 @@ func NewUserController(uc users.Usecase) *UserController {
 	}
 }
 
-// func (ctrl *UserController) Register(c echo.Context) error {
-// ctx := c.Request().Context()
-
-// 	// return controller.NewSuccessResponse(c, "Successfully inserted")
-// 	return baseResponse.SuccessResponse(c, alert.SuccessInsert)
-// }
 func (ctrl *UserController) Register(c echo.Context) error {
 	ctx := c.Request().Context()
 	req := ReqUsers{}
@@ -41,6 +35,28 @@ func (ctrl *UserController) Register(c echo.Context) error {
 	}
 
 	return baseResponse.SuccessResponse(c, alert.SuccessInsert, nil)
-	// return baseResponse.SuccessResponse(c, req.Email, nil)
+}
 
+func (ctrl *UserController) Login(c echo.Context) error {
+
+	ctx := c.Request().Context()
+	req := ReqLogin{}
+	err := c.Bind(&req)
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	token, expired, err := ctrl.userUseCase.Login(ctx, req.Email, req.Password)
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	response := struct {
+		Token       string `json:"token"`
+		ExpiredDate string `json:"expired_date"`
+	}{Token: token, ExpiredDate: expired}
+
+	return baseResponse.SuccessResponse(c, response, nil)
 }

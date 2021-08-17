@@ -16,9 +16,11 @@ type Domain struct {
 
 type Usecase interface {
 	Create(ctx context.Context, email string, data *Domain) error
+	Login(ctx context.Context, email, password string) (string, string, error)
 }
 
 type Repository interface {
 	Create(ctx context.Context, data *Domain) error
 	GetByEmail(ctx context.Context, email string) (int, error)
+	Login(ctx context.Context, email, password string) (Domain, error)
 }

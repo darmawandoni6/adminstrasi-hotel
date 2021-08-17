@@ -8,6 +8,11 @@ type ReqUsers struct {
 	Password string `json:"password"`
 }
 
+type ReqLogin struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 func (req *ReqUsers) ToDomain() *users.Domain {
 	return &users.Domain{
 		Name:     req.Name,

@@ -13,7 +13,9 @@ type ControllerList struct {
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
-	route := e.Group("api/v1")
-	route.POST("/auth/register", cl.UserController.Register)
+	v1 := "api/v1"
+	auth := e.Group(v1)
+	auth.POST("/auth/register", cl.UserController.Register)
+	auth.POST("/auth/login", cl.UserController.Login)
 
 }

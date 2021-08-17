@@ -48,7 +48,7 @@ func main() {
 	e := echo.New()
 
 	userRepo := _userRepo.UsersRepository(db)
-	userUsecase := _userUsecase.UsersUsecase(timeoutContext, userRepo)
+	userUsecase := _userUsecase.UsersUsecase(timeoutContext, userRepo, &configJWT)
 	userControler := _userController.NewUserController(userUsecase)
 
 	routesInit := _routes.ControllerList{

@@ -35,3 +35,14 @@ func (ur *repository) GetByEmail(ctx context.Context, email string) (int, error)
 
 	return int(count), nil
 }
+
+func (ur *repository) Login(ctx context.Context, email, password string) (users.Domain, error) {
+	res := users.Domain{}
+	err := ur.db.Model(&Users{}).Where("email = ? AND password = ? ", email, password).First(&res).Error
+
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
+}
