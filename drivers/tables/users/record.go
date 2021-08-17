@@ -10,6 +10,7 @@ type Users struct {
 	Name      string
 	Email     string
 	Password  string
+	IsDelete  bool
 	CreatedAt time.Time `gorm:"<-:create"`
 	UpdatedAt time.Time
 }
@@ -19,6 +20,7 @@ func (req *Users) toDomain() *users.Domain {
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: req.Password,
+		IsDelete: req.IsDelete,
 	}
 }
 
@@ -27,6 +29,7 @@ func fromDomain(domain *users.Domain) *Users {
 		Name:      domain.Name,
 		Email:     domain.Email,
 		Password:  domain.Password,
+		IsDelete:  domain.IsDelete,
 		CreatedAt: domain.CreatedAt,
 		UpdatedAt: domain.UpdatedAt,
 	}

@@ -6,6 +6,7 @@ var (
 	// alert
 	SuccessInsert = "Successfully inserted"
 	SuccessUpdate = "Successfully updated"
+	SuccessDelete = "Successfully deleted"
 	// error
 	ErrInternalServer = errors.New("something gone wrong, contact administrator")
 

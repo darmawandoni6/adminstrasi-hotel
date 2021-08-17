@@ -3,7 +3,7 @@ package users
 import (
 	"administrasi-hotel/busieness/users"
 	"context"
-	"fmt"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -81,10 +81,23 @@ func (ur *repository) Update(ctx context.Context, id int, domain *users.Domain) 
 	rec := fromDomain(domain)
 	rec.Id = id
 	err := ur.db.Save(&rec).Error
-	fmt.Println(rec)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+func (ur *repository) Delete(ctx context.Context, id int, domain *users.Domain) error {
+	rec := fromDomain(domain)
+	rec.Id = id
+	rec.UpdatedAt = time.Now()
+	rec.IsDelete = true
+	err := ur.db.Save(&rec).Error
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
