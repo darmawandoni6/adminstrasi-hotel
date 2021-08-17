@@ -92,9 +92,8 @@ func (ctrl *UserController) Find(c echo.Context) error {
 	resArr := []ResUsers{}
 
 	for _, value := range res {
-		// resArr = append(responseController, response.FromDomain(value))
 		resArr = append(resArr, FromDomain(value))
 	}
 
-	return baseResponse.SuccessResponse(c, resArr, nil)
+	return baseResponse.SuccessResponse(c, resArr, paginition)
 }
