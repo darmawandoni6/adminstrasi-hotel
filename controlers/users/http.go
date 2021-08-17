@@ -64,29 +64,29 @@ func (ctrl *UserController) Login(c echo.Context) error {
 
 func (ctrl *UserController) Find(c echo.Context) error {
 	ctx := c.Request().Context()
-	page := c.QueryParam("page")
-	offset := c.QueryParam("limit")
+	qureyPage := c.QueryParam("page")
+	qureyOffset := c.QueryParam("limit")
 	paginition := baseResponse.Pagination{}
 
-	p, err := strconv.Atoi(page)
+	page, err := strconv.Atoi(qureyPage)
 	if err != nil {
 		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	o, err := strconv.Atoi(offset)
+	offset, err := strconv.Atoi(qureyOffset)
 	if err != nil {
 		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	res, count, LastPage, err := ctrl.userUseCase.Find(ctx, p, o)
+	res, count, LastPage, err := ctrl.userUseCase.Find(ctx, page, offset)
 
 	if err != nil {
-		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+		return baseResponse.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	paginition.CurrentPage = p
+	paginition.CurrentPage = page
 	paginition.LastPage = LastPage
-	paginition.PerPage = o
+	paginition.PerPage = offset
 	paginition.Total = count
 
 	resArr := []ResUsers{}
@@ -96,4 +96,25 @@ func (ctrl *UserController) Find(c echo.Context) error {
 	}
 
 	return baseResponse.SuccessResponse(c, resArr, paginition)
+}
+
+func (ctrl *UserController) FindById(c echo.Context) error {
+
+	ctx := c.Request().Context()
+	paramId := c.Param("id")
+
+	id, err := strconv.Atoi(paramId)
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	res, err := ctrl.userUseCase.FindById(ctx, id)
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusInternalServerError, err)
+
+	}
+
+	return baseResponse.SuccessResponse(c, FromDomain(res), nil)
+
 }

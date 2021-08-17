@@ -63,3 +63,16 @@ func (ur *repository) Find(ctx context.Context, page, perPage int) ([]users.Doma
 
 	return res, int(count), nil
 }
+
+func (ur *repository) FindById(ctx context.Context, id int) (users.Domain, error) {
+
+	res := users.Domain{}
+
+	err := ur.db.Model(&Users{}).Where("id = ? ", id).First(&res).Error
+
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
+}

@@ -82,3 +82,16 @@ func (uc *usecase) Find(ctx context.Context, page, perPage int) ([]Domain, int, 
 
 	return res, count, lastPage, err
 }
+
+func (uc *usecase) FindById(ctx context.Context, id int) (Domain, error) {
+
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	res, err := uc.respository.FindById(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return res, nil
+}

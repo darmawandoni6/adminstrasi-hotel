@@ -24,5 +24,6 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	user := e.Group(v1 + "/users")
 	user.Use(jwt)
 	user.GET("", cl.UserController.Find)
+	user.GET("/id/:id", cl.UserController.FindById)
 
 }
