@@ -73,8 +73,20 @@ func (ctrl *FacilitiesController) Find(c echo.Context) error {
 }
 
 func (ctrl *FacilitiesController) FindById(c echo.Context) error {
+	ctx := c.Request().Context()
+	paramId := c.Param("id")
 
-	return baseResponse.SuccessResponse(c, alert.SuccessInsert, nil)
+	id, err := strconv.Atoi(paramId)
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+	res, err := ctrl.facilitiesUsecase.FindById(ctx, id)
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	return baseResponse.SuccessResponse(c, FromDomain(res), nil)
 }
 
 func (ctrl *FacilitiesController) Update(c echo.Context) error {
