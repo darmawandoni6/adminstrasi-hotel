@@ -2,6 +2,7 @@ package routes
 
 import (
 	"administrasi-hotel/controlers/facilities"
+	"administrasi-hotel/controlers/rooms"
 	"administrasi-hotel/controlers/typeRooms"
 	"administrasi-hotel/controlers/users"
 
@@ -14,12 +15,13 @@ type ControllerList struct {
 	UserController       users.UserController
 	FacilitiesController facilities.FacilitiesController
 	TypeRoomsController  typeRooms.TypeRoomsController
+	RoomsController      rooms.RoomsController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	jwt := middleware.JWTWithConfig(cl.JWTMiddleware)
 
-	v1 := e.Group("api/v1")
+	v1 := e.Group("/api/v1")
 
 	auth := v1.Group("/auth")
 	auth.POST("/register", cl.UserController.Register)
@@ -51,5 +53,13 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	typeRooms.POST("", cl.TypeRoomsController.Create)
 	typeRooms.PUT("/id/:id", cl.TypeRoomsController.Update)
 	typeRooms.DELETE("/id/:id", cl.TypeRoomsController.Delete)
+
+	rooms := v1.Group("/rooms")
+	rooms.Use(jwt)
+	rooms.GET("", cl.RoomsController.Find)
+	rooms.GET("/id/:id", cl.RoomsController.FindById)
+	rooms.POST("", cl.RoomsController.Create)
+	rooms.PUT("/id/:id", cl.RoomsController.Update)
+	rooms.DELETE("/id/:id", cl.RoomsController.Delete)
 
 }

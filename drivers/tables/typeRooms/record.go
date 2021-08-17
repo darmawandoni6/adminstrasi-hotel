@@ -11,7 +11,7 @@ type TypeRooms struct {
 	IsActive  bool
 	IsDelete  bool
 	CreatedAt time.Time `gorm:"<-:create"`
-	UpdatedAt time.Time
+	UpdatedAt time.Time `gorm:"<-:create"`
 }
 
 func (req *TypeRooms) toDomain() *typeRooms.Domain {

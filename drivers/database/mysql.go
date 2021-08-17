@@ -2,6 +2,7 @@ package database
 
 import (
 	"administrasi-hotel/drivers/tables/facilities"
+	"administrasi-hotel/drivers/tables/rooms"
 	"administrasi-hotel/drivers/tables/typeRooms"
 	"administrasi-hotel/drivers/tables/users"
 	"fmt"
@@ -36,6 +37,7 @@ func (config *ConfigDB) InitialDB() *gorm.DB {
 		&users.Users{},
 		&facilities.Facilities{},
 		&typeRooms.TypeRooms{},
+		&rooms.Rooms{},
 	)
 
 	return db
