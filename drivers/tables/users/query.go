@@ -3,6 +3,7 @@ package users
 import (
 	"administrasi-hotel/busieness/users"
 	"context"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -28,7 +29,7 @@ func (ur *repository) Create(ctx context.Context, domain *users.Domain) error {
 	return nil
 }
 
-func (ur *repository) GetByEmail(ctx context.Context, email string) (int, error) {
+func (ur *repository) FindByEmail(ctx context.Context, email string) (int, error) {
 	var count int64
 
 	ur.db.Model(&Users{}).Where("email = ?", email).Count(&count)
@@ -75,4 +76,15 @@ func (ur *repository) FindById(ctx context.Context, id int) (users.Domain, error
 	}
 
 	return res, nil
+}
+func (ur *repository) Update(ctx context.Context, id int, domain *users.Domain) error {
+	rec := fromDomain(domain)
+	rec.Id = id
+	err := ur.db.Save(&rec).Error
+	fmt.Println(rec)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

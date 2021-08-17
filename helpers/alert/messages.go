@@ -5,6 +5,7 @@ import "errors"
 var (
 	// alert
 	SuccessInsert = "Successfully inserted"
+	SuccessUpdate = "Successfully updated"
 	// error
 	ErrInternalServer = errors.New("something gone wrong, contact administrator")
 

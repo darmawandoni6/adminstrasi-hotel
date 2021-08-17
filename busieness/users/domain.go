@@ -19,12 +19,14 @@ type Usecase interface {
 	Login(ctx context.Context, email, password string) (string, string, error)
 	Find(ctx context.Context, page, perPage int) ([]Domain, int, int, error)
 	FindById(ctx context.Context, id int) (Domain, error)
+	Update(ctx context.Context, id int, data *Domain) error
 }
 
 type Repository interface {
 	Create(ctx context.Context, data *Domain) error
-	GetByEmail(ctx context.Context, email string) (int, error)
+	FindByEmail(ctx context.Context, email string) (int, error)
 	Login(ctx context.Context, email, password string) (Domain, error)
 	Find(ctx context.Context, page, perPage int) ([]Domain, int, error)
 	FindById(ctx context.Context, id int) (Domain, error)
+	Update(ctx context.Context, id int, data *Domain) error
 }

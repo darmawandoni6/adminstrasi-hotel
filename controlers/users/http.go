@@ -116,5 +116,33 @@ func (ctrl *UserController) FindById(c echo.Context) error {
 	}
 
 	return baseResponse.SuccessResponse(c, FromDomain(res), nil)
+}
+
+func (ctrl *UserController) Update(c echo.Context) error {
+	ctx := c.Request().Context()
+	req := ReqUsers{}
+	paramId := c.Param("id")
+	err := c.Bind(&req)
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	id, err := strconv.Atoi(paramId)
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	err = ctrl.userUseCase.Update(ctx, id, req.ToDomain())
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	return baseResponse.SuccessResponse(c, alert.SuccessUpdate, nil)
 
 }

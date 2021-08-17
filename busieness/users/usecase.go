@@ -24,7 +24,7 @@ func (uc *usecase) Create(ctx context.Context, email string, domain *Domain) err
 	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
-	count, err := uc.respository.GetByEmail(ctx, email)
+	count, err := uc.respository.FindByEmail(ctx, email)
 	if err != nil {
 		return err
 	}
@@ -94,4 +94,38 @@ func (uc *usecase) FindById(ctx context.Context, id int) (Domain, error) {
 	}
 
 	return res, nil
+}
+
+func (uc *usecase) Update(ctx context.Context, id int, data *Domain) error {
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	res, err := uc.respository.FindById(ctx, id)
+
+	if err != nil {
+		return err
+	}
+	if res.Email != data.Email {
+		count, err := uc.respository.FindByEmail(ctx, data.Email)
+		if err != nil {
+			return err
+		}
+
+		if count > 0 {
+			return alert.ErrDuplicateData
+		}
+	}
+
+	data.UpdatedAt = time.Now()
+	if data.Password == "" {
+		data.Password = res.Password
+	}
+
+	err = uc.respository.Update(ctx, id, data)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
