@@ -17,6 +17,10 @@ import (
 	_roomsController "administrasi-hotel/controlers/rooms"
 	_roomsRepo "administrasi-hotel/drivers/tables/rooms"
 
+	_checkinUsecase "administrasi-hotel/busieness/checkin"
+	_checkinController "administrasi-hotel/controlers/checkin"
+	_checkinRepo "administrasi-hotel/drivers/tables/checkin"
+
 	"time"
 
 	"administrasi-hotel/drivers/database"
@@ -76,12 +80,17 @@ func main() {
 	roomUsecase := _roomsUsecase.RoomsUsecase(timeoutContext, roomsRepo, &configJWT)
 	roomControler := _roomsController.NewRoomsController(roomUsecase)
 
+	checkinRepo := _checkinRepo.CheckinRepository(db)
+	checkinUsecase := _checkinUsecase.CheckinUsecase(timeoutContext, checkinRepo, &configJWT)
+	checkinController := _checkinController.NewCheckinController(checkinUsecase)
+
 	routesInit := _routes.ControllerList{
 		JWTMiddleware:        configJWT.Init(),
 		UserController:       *userControler,
 		FacilitiesController: *facilitiesControler,
 		TypeRoomsController:  *typeRoomsController,
 		RoomsController:      *roomControler,
+		CheckinController:    *checkinController,
 	}
 	routesInit.RouteRegister(e)
 

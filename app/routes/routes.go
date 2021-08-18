@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"administrasi-hotel/controlers/checkin"
 	"administrasi-hotel/controlers/facilities"
 	"administrasi-hotel/controlers/rooms"
 	"administrasi-hotel/controlers/typeRooms"
@@ -16,6 +17,7 @@ type ControllerList struct {
 	FacilitiesController facilities.FacilitiesController
 	TypeRoomsController  typeRooms.TypeRoomsController
 	RoomsController      rooms.RoomsController
+	CheckinController    checkin.CheckinController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
@@ -61,5 +63,13 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	rooms.POST("", cl.RoomsController.Create)
 	rooms.PUT("/id/:id", cl.RoomsController.Update)
 	rooms.DELETE("/id/:id", cl.RoomsController.Delete)
+
+	checkin := v1.Group("/checkin")
+	checkin.Use(jwt)
+	// checkin.GET("", cl.RoomsController.Find)
+	checkin.GET("/id/:id", cl.CheckinController.FindById)
+	checkin.POST("", cl.CheckinController.Create)
+	// checkin.PUT("/id/:id", cl.RoomsController.Update)
+	// checkin.DELETE("/id/:id", cl.RoomsController.Delete)
 
 }

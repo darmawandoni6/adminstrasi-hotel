@@ -18,7 +18,7 @@ type ResRooms struct {
 
 func FromDomain(domain rooms.Domain) ResRooms {
 
-	rooms := ResRooms{
+	return ResRooms{
 		Id:         domain.Id,
 		Name:       domain.Name,
 		TypeRoomId: domain.TypeRoomId,
@@ -28,5 +28,4 @@ func FromDomain(domain rooms.Domain) ResRooms {
 		UpdatedAt:  domain.UpdatedAt,
 		TypeRoom:   domain.TypeRoom,
 	}
-	return rooms
 }

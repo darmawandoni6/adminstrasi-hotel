@@ -1,6 +1,8 @@
 package database
 
 import (
+	"administrasi-hotel/drivers/tables/checkin"
+	"administrasi-hotel/drivers/tables/checkinDetail"
 	"administrasi-hotel/drivers/tables/facilities"
 	"administrasi-hotel/drivers/tables/rooms"
 	"administrasi-hotel/drivers/tables/typeRooms"
@@ -38,6 +40,8 @@ func (config *ConfigDB) InitialDB() *gorm.DB {
 		&facilities.Facilities{},
 		&typeRooms.TypeRooms{},
 		&rooms.Rooms{},
+		&checkin.Checkins{},
+		&checkinDetail.CheckinDetail{},
 	)
 
 	return db
