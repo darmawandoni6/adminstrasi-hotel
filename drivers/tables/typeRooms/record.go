@@ -14,8 +14,9 @@ type TypeRooms struct {
 	UpdatedAt time.Time `gorm:"<-:create"`
 }
 
-func (req *TypeRooms) toDomain() *typeRooms.Domain {
+func (req *TypeRooms) ToDomain() *typeRooms.Domain {
 	return &typeRooms.Domain{
+		Id:       req.Id,
 		Name:     req.Name,
 		IsActive: req.IsActive,
 	}

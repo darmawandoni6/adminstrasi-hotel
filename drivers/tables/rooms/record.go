@@ -15,7 +15,19 @@ type Rooms struct {
 	IsActive   bool
 	IsDelete   bool
 	CreatedAt  time.Time `gorm:"<-:create"`
-	UpdatedAt  time.Time `gorm:"<-:create"`
+	UpdatedAt  time.Time
+}
+
+func (req *Rooms) ToDomain() *rooms.Domain {
+	return &rooms.Domain{
+		Id:         req.Id,
+		Name:       req.Name,
+		Price:      req.Price,
+		TypeRoomId: req.TypeRoomId,
+		TypeRoom:   *req.TypeRoom.ToDomain(),
+		CreatedAt:  req.CreatedAt,
+		UpdatedAt:  req.UpdatedAt,
+	}
 }
 
 func fromDomain(domain *rooms.Domain) *Rooms {

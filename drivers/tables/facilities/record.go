@@ -15,11 +15,14 @@ type Facilities struct {
 	UpdatedAt time.Time
 }
 
-func (req *Facilities) toDomain() *facilities.Domain {
+func (req *Facilities) ToDomain() *facilities.Domain {
 	return &facilities.Domain{
-		Name:     req.Name,
-		Price:    req.Price,
-		IsActive: req.IsActive,
+		Id:        req.Id,
+		Name:      req.Name,
+		Price:     req.Price,
+		IsActive:  req.IsActive,
+		CreatedAt: req.CreatedAt,
+		UpdatedAt: req.UpdatedAt,
 	}
 }
 

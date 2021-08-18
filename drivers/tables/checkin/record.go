@@ -21,6 +21,33 @@ type Checkins struct {
 	UpdatedAt     time.Time
 }
 
+func (req *Checkins) toDomain() *checkin.Domain {
+
+	detail := []checkin.DomainDetail{}
+
+	for i := 0; i < len(req.CheckinDetail); i++ {
+		detail = append(detail, checkin.DomainDetail{
+			Id:           req.CheckinDetail[i].Id,
+			CheckinId:    req.CheckinDetail[i].CheckinId,
+			FacilitiesId: req.CheckinDetail[i].FacilitiesId,
+			Facilities:   *req.CheckinDetail[i].Facilities.ToDomain(),
+			IsCheckout:   req.CheckinDetail[i].IsCheckout,
+			CreatedAt:    req.CheckinDetail[i].CreatedAt,
+			UpdatedAt:    req.CheckinDetail[i].UpdatedAt,
+		})
+	}
+
+	return &checkin.Domain{
+		Name:          req.Name,
+		Address:       req.Address,
+		RoomId:        req.RoomId,
+		Room:          *req.Room.ToDomain(),
+		StartDate:     req.StartDate,
+		EndDate:       req.EndDate,
+		CheckinDetail: detail,
+	}
+}
+
 func fromDomain(domain *checkin.Domain) *Checkins {
 	detail := []checkinDetail.CheckinDetail{}
 

@@ -1,6 +1,7 @@
 package checkin
 
 import (
+	"administrasi-hotel/busieness/facilities"
 	"administrasi-hotel/busieness/rooms"
 	"context"
 	"time"
@@ -24,7 +25,8 @@ type DomainDetail struct {
 	Id           int
 	CheckinId    int
 	FacilitiesId int
-	CheckoutDate time.Time
+	Facilities   facilities.Domain
+	IsCheckout   bool
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 }

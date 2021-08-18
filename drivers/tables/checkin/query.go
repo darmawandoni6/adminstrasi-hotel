@@ -29,11 +29,12 @@ func (ur *repository) Create(ctx context.Context, domain *checkin.Domain) error 
 }
 
 func (ur *repository) FindById(ctx context.Context, id int) (checkin.Domain, error) {
-	res := checkin.Domain{}
+	res := Checkins{}
 
-	err := ur.db.Debug().Model(&Checkins{}).Joins("Room").Joins("TypeRoom").Joins("CheckinDetail").Where("checkins.id = ? ", id).First(&res).Error
+	err := ur.db.Debug().Model(&Checkins{}).Preload("Room.TypeRoom").Preload("CheckinDetail.Facilities").Where("checkins.id = ? ", id).First(&res).Error
+	// fmt.Print(res)
 	if err != nil {
-		return res, err
+		return checkin.Domain{}, err
 	}
-	return res, nil
+	return *res.toDomain(), nil
 }

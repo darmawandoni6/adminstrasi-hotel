@@ -3,6 +3,7 @@ package checkin
 import (
 	"administrasi-hotel/app/middlewares"
 	"context"
+	"fmt"
 	"time"
 )
 
@@ -39,7 +40,7 @@ func (uc *usecase) FindById(ctx context.Context, id int) (Domain, error) {
 	defer cancel()
 
 	res, err := uc.respository.FindById(ctx, id)
-
+	fmt.Println(res)
 	if err != nil {
 		return Domain{}, err
 	}
