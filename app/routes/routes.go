@@ -66,7 +66,7 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 
 	checkin := v1.Group("/checkin")
 	checkin.Use(jwt)
-	// checkin.GET("", cl.RoomsController.Find)
+	checkin.GET("", cl.CheckinController.Find)
 	checkin.GET("/id/:id", cl.CheckinController.FindById)
 	checkin.POST("", cl.CheckinController.Create)
 	// checkin.PUT("/id/:id", cl.RoomsController.Update)

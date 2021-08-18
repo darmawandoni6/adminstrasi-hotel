@@ -32,6 +32,31 @@ func (ur *repository) Create(ctx context.Context, domain *checkin.Domain) error 
 	return nil
 }
 
+func (ur *repository) Find(ctx context.Context, page, perPage int) ([]checkin.Domain, int, error) {
+
+	res := []Checkins{}
+	offset := (page - 1) * perPage
+
+	// err := ur.db.Model(&Checkins{}).Preload("Room.TypeRoom").Preload("CheckinDetail.Facilities").Where("checkins.id = ? ", id).First(&res).Error
+
+	// result := ur.db.Model(&Checkins{}).Preload("Room.TypeRoom").Preload("CheckinDetail.Facilities").Find(&res).Offset(offset).Limit(perPage)
+
+	result := ur.db.Model(&Checkins{}).Preload("Room.TypeRoom").Preload("CheckinDetail.Facilities").Find(&res).Offset(offset).Limit(perPage)
+
+	count := result.RowsAffected
+
+	if result.Error != nil {
+		return []checkin.Domain{}, 0, result.Error
+	}
+
+	rows := []checkin.Domain{}
+	for _, value := range res {
+		rows = append(rows, *value.toDomain())
+	}
+
+	return rows, int(count), nil
+}
+
 func (ur *repository) FindById(ctx context.Context, id int) (checkin.Domain, error) {
 	res := Checkins{}
 
@@ -62,12 +87,11 @@ func (ur *repository) GetFacilityTotalPrice(ctx context.Context, data []checkin.
 
 	id := []int{}
 
-	// fmt.Println("-----------", data.)
 	for _, v := range data {
 		id = append(id, v.FacilitiesId)
 	}
 
-	result := ur.db.Debug().Model(&facilities.Facilities{}).Find(&res, id)
+	result := ur.db.Model(&facilities.Facilities{}).Find(&res, id)
 
 	for _, v := range res {
 		price += v.Price
