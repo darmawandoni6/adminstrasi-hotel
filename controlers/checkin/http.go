@@ -2,7 +2,6 @@ package checkin
 
 import (
 	"administrasi-hotel/busieness/checkin"
-	"administrasi-hotel/helpers/alert"
 	"administrasi-hotel/helpers/baseResponse"
 	"net/http"
 	"strconv"
@@ -35,7 +34,7 @@ func (ctrl *CheckinController) Create(c echo.Context) error {
 		return baseResponse.ErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return baseResponse.SuccessResponse(c, alert.SuccessInsert, nil)
+	return baseResponse.SuccessResponse(c, req, nil)
 }
 
 func (ctrl *CheckinController) FindById(c echo.Context) error {

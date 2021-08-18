@@ -45,4 +45,6 @@ type Repository interface {
 	FindById(ctx context.Context, id int) (Domain, error)
 	// Update(ctx context.Context, id int, data *Domain) error
 	// Delete(ctx context.Context, id int, data *Domain) error
+	GetPriceRoom(ctx context.Context, id int) (float64, error)
+	GetFacilityTotalPrice(ctx context.Context, facility []DomainDetail) (float64, error)
 }

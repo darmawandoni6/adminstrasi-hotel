@@ -26,10 +26,27 @@ func (uc *usecase) Create(ctx context.Context, domain *Domain) error {
 	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
-	err := uc.respository.Create(ctx, domain)
+	priceRoom, err := uc.respository.GetPriceRoom(ctx, domain.RoomId)
 
 	if err != nil {
-		return nil
+		return err
+	}
+
+	day := domain.EndDate.Sub(domain.StartDate).Hours() / 24
+	priceRoom *= float64(day)
+
+	priceFacility, err := uc.respository.GetFacilityTotalPrice(ctx, domain.CheckinDetail)
+
+	if err != nil {
+		return err
+	}
+
+	domain.GrandTotal = priceRoom + priceFacility
+
+	err = uc.respository.Create(ctx, domain)
+
+	if err != nil {
+		return err
 	}
 
 	return nil
