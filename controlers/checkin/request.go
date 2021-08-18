@@ -37,3 +37,22 @@ func (req *ReqCheckin) ToDomain() *checkin.Domain {
 		CheckinDetail: detail,
 	}
 }
+
+type ReqAddFacilities struct {
+	Detail []struct {
+		FacilitiesId int `json:"facility_id"`
+	} `json:"detail"`
+}
+
+func (req *ReqAddFacilities) ToDomain() []checkin.DomainDetail {
+
+	detail := []checkin.DomainDetail{}
+	for i := 0; i < len(req.Detail); i++ {
+		detail = append(detail, checkin.DomainDetail{
+			FacilitiesId: req.Detail[i].FacilitiesId,
+		})
+	}
+
+	return detail
+
+}

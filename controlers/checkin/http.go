@@ -4,6 +4,8 @@ import (
 	"administrasi-hotel/busieness/checkin"
 	"administrasi-hotel/helpers/alert"
 	"administrasi-hotel/helpers/baseResponse"
+	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -68,6 +70,7 @@ func (ctrl *CheckinController) Find(c echo.Context) error {
 	resArr := []ResCheckin{}
 
 	for _, value := range res {
+
 		resArr = append(resArr, FromDomain(value))
 	}
 	return baseResponse.SuccessResponse(c, resArr, paginition)
@@ -88,4 +91,48 @@ func (ctrl *CheckinController) FindById(c echo.Context) error {
 	}
 
 	return baseResponse.SuccessResponse(c, FromDomain(res), nil)
+}
+
+func (ctrl *CheckinController) AddFacilities(c echo.Context) error {
+	ctx := c.Request().Context()
+	req := ReqAddFacilities{}
+	paramId := c.Param("id")
+	err := c.Bind(&req)
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, errors.New("err asdasd"))
+	}
+
+	id, err := strconv.Atoi(paramId)
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	fmt.Println(id, req.Detail)
+
+	err = ctrl.checkinUsecase.AddFacilities(ctx, id, req.ToDomain())
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	return baseResponse.SuccessResponse(c, alert.SuccessInsert, nil)
+}
+
+func (ctrl *CheckinController) CheckOut(c echo.Context) error {
+	ctx := c.Request().Context()
+	paramId := c.Param("id")
+
+	id, err := strconv.Atoi(paramId)
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	err = ctrl.checkinUsecase.Checkout(ctx, id)
+
+	if err != nil {
+		return baseResponse.ErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	return baseResponse.SuccessResponse(c, alert.SuccessDelete, nil)
 }

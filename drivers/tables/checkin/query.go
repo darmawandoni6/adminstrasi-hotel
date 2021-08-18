@@ -3,7 +3,10 @@ package checkin
 import (
 	"administrasi-hotel/busieness/checkin"
 	domainFacilities "administrasi-hotel/busieness/facilities"
+	"fmt"
+	"time"
 
+	"administrasi-hotel/drivers/tables/checkinDetail"
 	"administrasi-hotel/drivers/tables/facilities"
 	"administrasi-hotel/drivers/tables/rooms"
 	"context"
@@ -36,10 +39,6 @@ func (ur *repository) Find(ctx context.Context, page, perPage int) ([]checkin.Do
 
 	res := []Checkins{}
 	offset := (page - 1) * perPage
-
-	// err := ur.db.Model(&Checkins{}).Preload("Room.TypeRoom").Preload("CheckinDetail.Facilities").Where("checkins.id = ? ", id).First(&res).Error
-
-	// result := ur.db.Model(&Checkins{}).Preload("Room.TypeRoom").Preload("CheckinDetail.Facilities").Find(&res).Offset(offset).Limit(perPage)
 
 	result := ur.db.Model(&Checkins{}).Preload("Room.TypeRoom").Preload("CheckinDetail.Facilities").Find(&res).Offset(offset).Limit(perPage)
 
@@ -103,4 +102,41 @@ func (ur *repository) GetFacilityTotalPrice(ctx context.Context, data []checkin.
 
 	return price, nil
 
+}
+
+func (ur *repository) AddFacilities(ctx context.Context, id int, data []checkin.DomainDetail) error {
+	req := checkinDetail.FromDomainDetail(data, id)
+	fmt.Println(req)
+	err := ur.db.Model(&checkinDetail.CheckinDetail{}).Create(&req).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (ur *repository) Checkout(ctx context.Context, id int, data *checkin.Domain) error {
+	rec := fromDomain(data)
+	rec.Id = id
+	rec.UpdatedAt = time.Now()
+	rec.IsCheckout = true
+	err := ur.db.Save(&rec).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}
+
+func (ur *repository) FindByIdDetail(ctx context.Context, id int) (checkin.Domain, error) {
+	res := checkin.Domain{}
+
+	err := ur.db.Model(&Checkins{}).Where("id = ? ", id).First(&res).Error
+
+	if err != nil {
+		return res, err
+	}
+
+	return res, nil
 }

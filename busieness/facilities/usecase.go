@@ -74,6 +74,7 @@ func (uc *usecase) Update(ctx context.Context, id int, data *Domain) error {
 	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
 
+	data.UpdatedAt = time.Now()
 	err := uc.respository.Update(ctx, id, data)
 
 	if err != nil {

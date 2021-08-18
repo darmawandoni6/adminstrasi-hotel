@@ -69,7 +69,6 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	checkin.GET("", cl.CheckinController.Find)
 	checkin.GET("/id/:id", cl.CheckinController.FindById)
 	checkin.POST("", cl.CheckinController.Create)
-	// checkin.PUT("/id/:id", cl.RoomsController.Update)
-	// checkin.DELETE("/id/:id", cl.RoomsController.Delete)
-
+	checkin.PUT("/id/:id", cl.CheckinController.AddFacilities)
+	checkin.PUT("/id/:id", cl.CheckinController.CheckOut)
 }

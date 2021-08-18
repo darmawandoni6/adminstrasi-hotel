@@ -17,7 +17,8 @@ type Checkins struct {
 	GrandTotal    float64
 	Room          rooms.Rooms                   `gorm:"foreignKey:RoomId"`
 	CheckinDetail []checkinDetail.CheckinDetail `gorm:"foreignKey:CheckinId"`
-	CreatedAt     time.Time                     `gorm:"<-:create"`
+	IsCheckout    bool
+	CreatedAt     time.Time `gorm:"<-:create"`
 	UpdatedAt     time.Time
 }
 
@@ -31,13 +32,13 @@ func (req *Checkins) toDomain() *checkin.Domain {
 			CheckinId:    req.CheckinDetail[i].CheckinId,
 			FacilitiesId: req.CheckinDetail[i].FacilitiesId,
 			Facilities:   *req.CheckinDetail[i].Facilities.ToDomain(),
-			IsCheckout:   req.CheckinDetail[i].IsCheckout,
 			CreatedAt:    req.CheckinDetail[i].CreatedAt,
 			UpdatedAt:    req.CheckinDetail[i].UpdatedAt,
 		})
 	}
 
 	return &checkin.Domain{
+		Id:            req.Id,
 		Name:          req.Name,
 		Address:       req.Address,
 		RoomId:        req.RoomId,
@@ -45,6 +46,10 @@ func (req *Checkins) toDomain() *checkin.Domain {
 		StartDate:     req.StartDate,
 		EndDate:       req.EndDate,
 		CheckinDetail: detail,
+		IsCheckout:    req.IsCheckout,
+		GrandTotal:    req.GrandTotal,
+		CreatedAt:     req.CreatedAt,
+		UpdatedAt:     req.UpdatedAt,
 	}
 }
 

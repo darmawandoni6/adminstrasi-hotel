@@ -3,7 +3,6 @@ package checkin
 import (
 	"administrasi-hotel/app/middlewares"
 	"context"
-	"fmt"
 	"time"
 )
 
@@ -81,9 +80,39 @@ func (uc *usecase) FindById(ctx context.Context, id int) (Domain, error) {
 	defer cancel()
 
 	res, err := uc.respository.FindById(ctx, id)
-	fmt.Println(res)
 	if err != nil {
 		return Domain{}, err
 	}
 	return res, err
+}
+func (uc *usecase) AddFacilities(ctx context.Context, id int, data []DomainDetail) error {
+
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	err := uc.respository.AddFacilities(ctx, id, data)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (uc *usecase) Checkout(ctx context.Context, id int) error {
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	res, err := uc.respository.FindByIdDetail(ctx, id)
+
+	if err != nil {
+		return err
+	}
+
+	err = uc.respository.Checkout(ctx, id, &res)
+
+	if err != nil {
+		return err
+	}
+	return nil
 }

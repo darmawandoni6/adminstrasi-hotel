@@ -8,16 +8,18 @@ import (
 )
 
 type ResCheckin struct {
-	Id        int                `json:"id"`
-	Name      string             `json:"name"`
-	Address   string             `json:"address"`
-	RoomId    int                `json:"room_id"`
-	StartDate time.Time          `json:"start_date"`
-	EndDate   time.Time          `json:"end_date"`
-	CreatedAt time.Time          `json:"created_at"`
-	UpdatedAt time.Time          `json:"updated_at"`
-	Detail    []ResCheckinDetail `json:"detail"`
-	Room      rooms.ResRooms     `json:"room"`
+	Id         int                `json:"id"`
+	Name       string             `json:"name"`
+	Address    string             `json:"address"`
+	RoomId     int                `json:"room_id"`
+	StartDate  time.Time          `json:"start_date"`
+	EndDate    time.Time          `json:"end_date"`
+	Detail     []ResCheckinDetail `json:"detail"`
+	Room       rooms.ResRooms     `json:"room"`
+	GrandTotal float64            `json:"grand_total"`
+	IsCheckout bool               `json:"is_checkout"`
+	CreatedAt  time.Time          `json:"created_at"`
+	UpdatedAt  time.Time          `json:"updated_at"`
 }
 
 type ResCheckinDetail struct {
@@ -25,7 +27,6 @@ type ResCheckinDetail struct {
 	CheckinId    int                      `json:"name"`
 	FacilitiesId int                      `json:"address"`
 	Facilities   facilities.ResFacilities `json:"room_id"`
-	IsCheckout   bool                     `json:"start_date"`
 	CreatedAt    time.Time                `json:"created_at"`
 	UpdatedAt    time.Time                `json:"updated_at"`
 }
@@ -33,16 +34,18 @@ type ResCheckinDetail struct {
 func FromDomain(domain checkin.Domain) ResCheckin {
 
 	return ResCheckin{
-		Id:        domain.Id,
-		Name:      domain.Name,
-		Address:   domain.Address,
-		RoomId:    domain.RoomId,
-		StartDate: domain.StartDate,
-		EndDate:   domain.EndDate,
-		CreatedAt: domain.CreatedAt,
-		UpdatedAt: domain.UpdatedAt,
-		Detail:    FromDomainDetail(domain.CheckinDetail),
-		Room:      rooms.FromDomain(domain.Room),
+		Id:         domain.Id,
+		Name:       domain.Name,
+		Address:    domain.Address,
+		RoomId:     domain.RoomId,
+		StartDate:  domain.StartDate,
+		EndDate:    domain.EndDate,
+		Detail:     FromDomainDetail(domain.CheckinDetail),
+		Room:       rooms.FromDomain(domain.Room),
+		IsCheckout: domain.IsCheckout,
+		GrandTotal: domain.GrandTotal,
+		CreatedAt:  domain.CreatedAt,
+		UpdatedAt:  domain.UpdatedAt,
 	}
 }
 
@@ -56,7 +59,6 @@ func FromDomainDetail(domain []checkin.DomainDetail) []ResCheckinDetail {
 			CheckinId:    domain[i].CheckinId,
 			FacilitiesId: domain[i].FacilitiesId,
 			Facilities:   facilities.FromDomain(domain[i].Facilities),
-			IsCheckout:   domain[i].IsCheckout,
 			CreatedAt:    domain[i].CreatedAt,
 			UpdatedAt:    domain[i].UpdatedAt,
 		})
