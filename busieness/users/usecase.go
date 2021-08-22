@@ -5,6 +5,8 @@ import (
 	"administrasi-hotel/helpers/alert"
 	"context"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 type usecase struct {
@@ -52,6 +54,7 @@ func (uc *usecase) Login(ctx context.Context, email, password string) (string, s
 	res, err := uc.respository.Login(ctx, email, password)
 
 	if err != nil {
+		logrus.Error(err.Error())
 		return "", "", err
 	}
 	token, expired, _ := uc.jwtAuth.GenerateToken(res.Id)
@@ -62,6 +65,7 @@ func (uc *usecase) Login(ctx context.Context, email, password string) (string, s
 func (uc *usecase) Find(ctx context.Context, page, perPage int) ([]Domain, int, int, error) {
 	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
+
 	if page <= 0 {
 		page = 1
 	}
@@ -70,6 +74,7 @@ func (uc *usecase) Find(ctx context.Context, page, perPage int) ([]Domain, int, 
 	}
 
 	res, count, err := uc.respository.Find(ctx, page, perPage)
+
 	if err != nil {
 		return []Domain{}, 0, 0, err
 	}
